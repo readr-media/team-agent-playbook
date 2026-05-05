@@ -1,0 +1,33 @@
+name: Sync AGENTS.md to target repos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'base/**'
+      - 'scripts/**'
+      - '.github/workflows/sync-agents.yml'
+  workflow_dispatch:
+
+# Avoid two concurrent syncs racing each other on the same target repos.
+concurrency:
+  group: sync-agents
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout playbook
+        uses: actions/checkout@v4
+
+      - name: Run sync script
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          ORG: ${{ github.repository_owner }}
+          SOURCE_SHA: ${{ github.sha }}
+          SOURCE_REPO: ${{ github.repository }}
+        run: bash scripts/sync.sh
