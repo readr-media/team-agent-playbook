@@ -105,11 +105,13 @@ target repos 透過 GitHub topic 自動發現，不需要維護中央清單。�
 - [ ] License：見 `LICENSE`
 - [ ] Description 與 topics 填妥（建議 `agents-md`、`ai-coding`、`team-standards`）
 - [ ] `main` 啟用 branch protection：require ≥1 PR review
-- [ ] Repo secret `GH_TOKEN`：PAT，需該 org 內 target repos 的 contents:write 與 pull-requests:write 權限
+- [ ] **GitHub App 建立並安裝在 org**：權限 Contents:write + PullRequests:write，安裝範圍 All repositories
+- [ ] Repo variable `SYNC_APP_ID`：上述 App 的 App ID
+- [ ] Repo secret `SYNC_APP_PRIVATE_KEY`：上述 App 下載的 `.pem` 內容（含 `-----BEGIN/END-----` 完整貼入）
 
 target repos 透過 topic 發現，不需要中央清單。任何要納管的 repo 加上 topic `team-agent-playbook-managed` 即可。
 
-forks（mirror-media、mirror-tv、mirrordaily）重複同樣的 secret 設定，scope 限自家 org 的 PAT。
+forks（mirror-media、mirror-tv、mirrordaily）各自重複同樣設定（自家 org 內建 App、安裝、注入 variable + secret）。每個 fork 的 App 範圍只在自家 org 內，相互隔離。
 
 ## License
 

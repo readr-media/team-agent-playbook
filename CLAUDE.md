@@ -32,4 +32,12 @@ Maintains `base/AGENTS.md` and bridge files (`base/CLAUDE.md`, `base/.gemini/set
 
 ## Branch protection (canonical)
 
-`main` requires ≥1 PR review. The sync workflow secret `GH_TOKEN` is scoped to the org's target repos.
+`main` requires ≥1 PR review.
+
+## Auth
+
+Sync workflow authenticates as a **GitHub App** (org-installed). Variables/secrets:
+- Variable `SYNC_APP_ID` — App's numeric ID
+- Secret `SYNC_APP_PRIVATE_KEY` — App's `.pem` content
+
+The workflow exchanges these for a short-lived installation token via `actions/create-github-app-token@v1` and passes it to `sync.sh` as `GH_TOKEN`. See [SPEC.md](SPEC.md) → "Authentication" for rationale.
