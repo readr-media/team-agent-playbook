@@ -83,7 +83,7 @@ The canonical (`readr-media/team-agent-playbook`) and forks **must not** carry t
 
 The sync workflow authenticates as a **GitHub App** installed on the org. The workflow exchanges the App's private key for a short-lived (1-hour) installation token via `actions/create-github-app-token@v1`, which is passed to `sync.sh` as `GH_TOKEN`.
 
-- **Variable** `SYNC_APP_ID` — the App's numeric ID
+- **Variable** `SYNC_APP_CLIENT_ID` — the App's Client ID (e.g. `Iv23xxxxxxxxxxxxxxxx`)
 - **Secret** `SYNC_APP_PRIVATE_KEY` — the App's `.pem` private key (full content)
 
 Why GitHub App over PAT:

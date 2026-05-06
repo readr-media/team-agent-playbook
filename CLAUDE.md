@@ -37,7 +37,7 @@ Maintains `base/AGENTS.md` and bridge files (`base/CLAUDE.md`, `base/.gemini/set
 ## Auth
 
 Sync workflow authenticates as a **GitHub App** (org-installed). Variables/secrets:
-- Variable `SYNC_APP_ID` — App's numeric ID
+- Variable `SYNC_APP_CLIENT_ID` — App's Client ID
 - Secret `SYNC_APP_PRIVATE_KEY` — App's `.pem` content
 
 The workflow exchanges these for a short-lived installation token via `actions/create-github-app-token@v1` and passes it to `sync.sh` as `GH_TOKEN`. See [SPEC.md](SPEC.md) → "Authentication" for rationale.

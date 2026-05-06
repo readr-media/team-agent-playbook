@@ -106,7 +106,7 @@ target repos 透過 GitHub topic 自動發現，不需要維護中央清單。�
 - [ ] Description 與 topics 填妥（建議 `agents-md`、`ai-coding`、`team-standards`）
 - [ ] `main` 啟用 branch protection：require ≥1 PR review
 - [ ] **GitHub App 建立並安裝在 org**：權限 Contents:write + PullRequests:write，安裝範圍 All repositories
-- [ ] Repo variable `SYNC_APP_ID`：上述 App 的 App ID
+- [ ] Repo variable `SYNC_APP_CLIENT_ID`：上述 App 的 Client ID（不是 App ID；可從 App 設定頁取得，或執行 `gh api /apps/<app-slug> --jq .client_id`）
 - [ ] Repo secret `SYNC_APP_PRIVATE_KEY`：上述 App 下載的 `.pem` 內容（含 `-----BEGIN/END-----` 完整貼入）
 
 target repos 透過 topic 發現，不需要中央清單。任何要納管的 repo 加上 topic `team-agent-playbook-managed` 即可。
