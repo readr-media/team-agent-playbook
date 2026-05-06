@@ -123,8 +123,8 @@ if ! REPO_INPUT="$(gh search repos \
         --topic "$MANAGED_TOPIC" \
         --owner "$ORG" \
         --limit 1000 \
-        --json nameWithOwner,isArchived \
-        --jq '[.[] | select(.isArchived == false)] | .[].nameWithOwner')"; then
+        --json fullName,isArchived \
+        --jq '[.[] | select(.isArchived == false)] | .[].fullName')"; then
     echo "::error::failed to discover repos via gh search"
     exit 1
 fi
