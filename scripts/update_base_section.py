@@ -25,6 +25,7 @@ START_MARKER = "<!-- TEAM-BASE-START -->"
 END_MARKER = "<!-- TEAM-BASE-END -->"
 
 LAST_SYNCED_RE = re.compile(r"<!-- Last synced: [^\n]* -->")
+EXISTING_COMMIT_RE = re.compile(r"<!-- Last synced: [^\n]+ \(commit (\w+)\) -->")
 
 EXIT_OK = 0
 EXIT_NO_MARKERS = 1
@@ -54,6 +55,12 @@ def inject_metadata(block: str, commit_hash: str) -> str:
             file=sys.stderr,
         )
     return new_block
+
+
+def extract_existing_commit(text: str) -> str | None:
+    """Return the commit hash recorded in target's `Last synced` metadata, if any."""
+    m = EXISTING_COMMIT_RE.search(text)
+    return m.group(1) if m else None
 
 
 def replace_team_base(target: str, new_block: str) -> str:
@@ -127,7 +134,16 @@ def main() -> int:
         )
         return EXIT_NO_MARKERS
 
-    # Case 2: target has markers — replace the region.
+    # Case 2: target has markers.
+    # Skip-fast path: if target's recorded commit hash matches the incoming
+    # commit (i.e. base content has already been synced at this version), don't
+    # rewrite. Avoids metadata-only PR noise on manual workflow_dispatch runs.
+    incoming_short = (args.commit[:7] or "") if args.commit else ""
+    existing_short = extract_existing_commit(target_text)
+    if incoming_short and existing_short and incoming_short == existing_short:
+        print(f"unchanged {args.target} (commit {existing_short} already synced)")
+        return EXIT_OK
+
     try:
         updated = replace_team_base(target_text, new_block)
     except ValueError as e:

@@ -21,6 +21,10 @@ jobs:
     steps:
       - name: Checkout playbook
         uses: actions/checkout@v6
+        with:
+          # Need full history so sync.sh can compute the commit that last
+          # modified base/AGENTS.md (used for stable metadata stamping).
+          fetch-depth: 0
 
       - name: Generate App token
         id: app-token

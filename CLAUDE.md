@@ -17,7 +17,7 @@ Maintains `base/AGENTS.md` and bridge files (`base/CLAUDE.md`, `base/.gemini/set
 
 | Command | Purpose |
 |---|---|
-| `python3 scripts/update_base_section.py <target> base/AGENTS.md --commit <hash>` | Replace TEAM-BASE region in a target file. Exit 1 if target has no markers. |
+| `python3 scripts/update_base_section.py <target> base/AGENTS.md --commit <hash>` | Replace TEAM-BASE region in a target file. Exit 1 if target has no markers. Skips writing if `<hash>` matches target's recorded commit (avoids metadata-only diffs). |
 | `python3 scripts/merge_gemini_settings.py <target> base/.gemini/settings.json` | Merge `.gemini/settings.json`, preserving existing keys. |
 | `bash scripts/init.sh <target_repo_path>` | One-time scaffold for a new target repo. |
 | `bash scripts/sync.sh` | Per-repo orchestrator. Only runs in GitHub Actions (requires `GH_TOKEN`, `ORG`, `SOURCE_SHA`). |

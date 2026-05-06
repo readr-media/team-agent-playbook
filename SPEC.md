@@ -44,9 +44,9 @@ Triggered only by push to `main` that modifies any file under `base/` (the synce
 1. **Discover targets**: `gh search repos --topic team-agent-playbook-managed --owner $ORG`. Archived repos filtered out.
 2. **Per repo** (subshell-isolated, failure does not stop the loop):
    a. Clone target with `GH_TOKEN`.
-   b. `update_base_section.py AGENTS.md base/AGENTS.md --commit $SHA`.
+   b. `update_base_section.py AGENTS.md base/AGENTS.md --commit $LAST_BASE_AGENTS_SHA`.
       - File missing → write full template.
-      - File has TEAM-BASE markers → replace region only.
+      - File has TEAM-BASE markers → replace region only, **unless** target's recorded commit hash equals `$LAST_BASE_AGENTS_SHA` (in which case base hasn't changed since last sync — skip writing to avoid metadata-only diffs).
       - File exists without markers → exit 1; sync.sh emits `::warning::` and skips.
    c. Ensure `CLAUDE.md` first line is `@AGENTS.md` (create if missing; move if elsewhere).
    d. `merge_gemini_settings.py .gemini/settings.json base/.gemini/settings.json`.
@@ -62,7 +62,9 @@ PR title: `chore: sync AGENTS.md base (commit <short-hash>)`.
 - HTML comments are invisible when rendered but visible to AI tools as text.
 - Universal across Markdown parsers; no extension required.
 
-`Last synced: YYYY-MM-DD (commit XXXXXXX)` placeholder text in `base/AGENTS.md` is replaced at sync time by regex in `update_base_section.py`.
+`Last synced: YYYY-MM-DD (commit XXXXXXX)` placeholder text in `base/AGENTS.md` is replaced at sync time by regex in `update_base_section.py`. The commit hash stamped is `LAST_BASE_AGENTS_SHA` (`git log -1 base/AGENTS.md`), **not** the run's `SOURCE_SHA`. This makes the stamp stable across runs that don't change `base/AGENTS.md`, so `update_base_section.py` can compare incoming hash against target's recorded hash and skip writing when they match — avoiding metadata-only PR noise on `workflow_dispatch` runs.
+
+Workflow uses `actions/checkout@v6` with `fetch-depth: 0` to make the full git history available to `git log` in the runner.
 
 ## Target Discovery: GitHub Topic
 

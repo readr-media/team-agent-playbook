@@ -31,6 +31,16 @@ SHORT_SHA="${SOURCE_SHA:0:7}"
 BRANCH="chore/sync-agents-${SHORT_SHA}"
 PR_TITLE="chore: sync AGENTS.md base (commit ${SHORT_SHA})"
 
+# AGENTS.md metadata stamps the commit that last modified base/AGENTS.md, not
+# SOURCE_SHA. This makes the stamp stable across runs that don't change base
+# content, so already-synced targets register no diff and are skipped.
+# Requires actions/checkout with fetch-depth: 0 to access full history.
+LAST_BASE_AGENTS_SHA="$(git -C "$PLAYBOOK_DIR" log -1 --format=%H -- base/AGENTS.md 2>/dev/null || echo "")"
+if [[ -z "$LAST_BASE_AGENTS_SHA" ]]; then
+    echo "::warning::could not determine last commit for base/AGENTS.md; falling back to SOURCE_SHA (skip-fast logic disabled)"
+    LAST_BASE_AGENTS_SHA="$SOURCE_SHA"
+fi
+
 git config --global user.email "github-actions[bot]@users.noreply.github.com"
 git config --global user.name "github-actions[bot]"
 
@@ -57,7 +67,7 @@ sync_repo() {
     # A. AGENTS.md
     local agents_rc=0
     python3 "${PLAYBOOK_DIR}/scripts/update_base_section.py" \
-        AGENTS.md "$BASE_AGENTS" --commit "$SOURCE_SHA" || agents_rc=$?
+        AGENTS.md "$BASE_AGENTS" --commit "$LAST_BASE_AGENTS_SHA" || agents_rc=$?
     if [[ $agents_rc -eq 1 ]]; then
         echo "::warning::${repo}: AGENTS.md exists without TEAM-BASE markers; skipping repo"
         echo "::endgroup::"
