@@ -39,7 +39,7 @@ scripts/
 
 ## Sync Flow
 
-Triggered by push to `main` affecting `base/**`, `scripts/**`, or `.github/workflows/sync-agents.yml`. `workflow_dispatch` also supported.
+Triggered only by push to `main` that modifies any file under `base/` (the synced template directory). Internal changes (scripts, workflow YAML, docs) do not trigger downstream sync — use `workflow_dispatch` if a manual re-sync is needed.
 
 1. **Discover targets**: `gh search repos --topic team-agent-playbook-managed --owner $ORG`. Archived repos filtered out.
 2. **Per repo** (subshell-isolated, failure does not stop the loop):

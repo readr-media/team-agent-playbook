@@ -8,7 +8,7 @@ Maintains `base/AGENTS.md` and bridge files (`base/CLAUDE.md`, `base/.gemini/set
 
 ## Working in this repo
 
-- `base/**` and `scripts/**` changes trigger the sync workflow on push to `main`.
+- Changes under `base/**` trigger the sync workflow on push to `main`. Internal changes (scripts, workflow YAML, docs) do not — use `workflow_dispatch` for a manual re-sync.
 - `templates/**` is one-time scaffold — not synced after a target repo's first init.
 - Editing `base/AGENTS.md` propagates to every target repo on next sync — review with care.
 - Use `[BREAKING]` prefix in PR title for changes that invalidate existing `## Project Customization` sections (e.g. marker syntax change).
