@@ -68,7 +68,7 @@ Do not invent APIs, file paths, function names, or behaviors. When uncertain, re
 Operations that are hard to undo or affect shared state require explicit user confirmation: `rm -rf`, `git push --force`, `git reset --hard`, dropping migrations, `--no-verify`, deleting branches, dropping database tables, etc. Never bypass safety checks as a shortcut.
 
 ### 5. Documentation Reflects Reality
-`README` and docs must match the implementation. If a code change makes the docs wrong, update the docs in the same change.
+`README` and docs must match the implementation. If a code change makes the docs wrong, update the docs in the same change. This explicitly includes `SPEC.md`, which serves as the authoritative project memory — update it whenever architecture, component layout, conventions, or significant decisions change.
 
 ### 6. Commit Discipline
 Do not commit automatically — present a summary and wait for explicit user approval. One commit per feature; do not split a single task across multiple commits. Use conventional commit messages.
