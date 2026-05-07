@@ -2,6 +2,12 @@
 
 團隊 AI 輔助開發的共同規範。一份 canonical 的 [`AGENTS.md`](https://agents.md/) 透過 GitHub Actions 自動同步進每個團隊 repo，讓 Claude Code、Gemini CLI、Codex CLI、Cursor 等 AI 工具都讀到相同的團隊標準。
 
+## 快速了解
+
+[![Team Agent Playbook 簡介](docs/slides-cover.png)](docs/team-agent-playbook-slides.pdf)
+
+點封面開 PDF（~10 分鐘）。
+
 ## 架構
 
 ```
